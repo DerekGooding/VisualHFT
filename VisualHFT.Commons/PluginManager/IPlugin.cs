@@ -1,6 +1,7 @@
-﻿using VisualHFT.UserSettings;
+﻿using VisualHFT.Commons.UserSettings;
+using VisualHFT.PluginManager;
 
-namespace VisualHFT.PluginManager
+namespace VisualHFT.Commons.PluginManager
 {
     public interface IPlugin
     {
@@ -10,7 +11,7 @@ namespace VisualHFT.PluginManager
         string Author { get; set; }
         ISetting Settings { get; set; }
         ePluginStatus Status { get; set; }
-        Action CloseSettingWindow { get; set; }
+        Action? CloseSettingWindow { get; set; }
 
         event EventHandler<ErrorEventArgs> OnError;
 
@@ -22,9 +23,8 @@ namespace VisualHFT.PluginManager
     }
     public class ErrorEventArgs : EventArgs
     {
-        public Exception Exception { get; set; }
-        public string PluginName { get; set; }
+        public Exception Exception { get; set; } = new();
+        public string PluginName { get; set; } = string.Empty;
         public bool IsCritical { get; set; }
     }
-
 }

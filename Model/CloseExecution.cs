@@ -11,7 +11,8 @@ namespace VisualHFT.Model
 {
     using System;
     using System.Collections.Generic;
-    
+    using VisualHFT.Commons.Model;
+
     public partial class CloseExecution
     {
         public int ExecutionID { get; set; }

@@ -6,7 +6,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using VisualHFT.DataRetriever.DataParsers;
+using VisualHFT.Commons.DataRetriever.DataParsers;
+using VisualHFT.Commons.Model;
 using VisualHFT.Helpers;
 using VisualHFT.Model;
 using WebSocket4Net;
@@ -93,7 +94,7 @@ namespace VisualHFT.DataRetriever
             }
             else if (dataType == "ActiveOrders")
             {
-                modelObj = _parser.Parse<List<VisualHFT.Model.Order>>(dataReceived.data, settings);
+                modelObj = _parser.Parse<List<Order>>(dataReceived.data, settings);
             }
             else if (dataType == "Strategies")
             {
@@ -105,7 +106,7 @@ namespace VisualHFT.DataRetriever
             }
             else if (dataType == "HeartBeats")
             {
-                modelObj = _parser.Parse<List<VisualHFT.Model.Provider>>(dataReceived.data, settings);
+                modelObj = _parser.Parse<List<Provider>>(dataReceived.data, settings);
             }
             else if (dataType == "Trades")
             {

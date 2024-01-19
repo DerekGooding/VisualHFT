@@ -16,6 +16,9 @@ namespace VisualHFT.DataRetriever
     using VisualHFT.Model;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using VisualHFT.Commons.Extensions;
+    using VisualHFT.Commons.Helpers;
+    using VisualHFT.Commons.Model;
 
     public class FIXDataRetriever : IDataRetriever, IApplication
     {
@@ -202,8 +205,8 @@ namespace VisualHFT.DataRetriever
         }
         private void HandleHeartBeat()
         {
-            var provider = new VisualHFT.ViewModel.Model.Provider() { LastUpdated = HelperTimeProvider.Now, ProviderCode = 12, ProviderID = 12, ProviderName = "FXCM", Status = eSESSIONSTATUS.BOTH_CONNECTED };
-            var model = new List<VisualHFT.ViewModel.Model.Provider>() { provider };
+            var provider = new Provider() { LastUpdated = HelperTimeProvider.Now, ProviderCode = 12, ProviderID = 12, ProviderName = "FXCM", Status = eSESSIONSTATUS.BOTH_CONNECTED };
+            var model = new List<Provider>() { provider };
             // Raise an event or further process the data as needed
             OnDataReceived?.Invoke(this, new DataEventArgs { DataType = "HeartBeats", ParsedModel = model, RawData = "" });
         }

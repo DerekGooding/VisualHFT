@@ -1,13 +1,12 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
-using VisualHFT.Helpers;
-using VisualHFT.ViewModel.Model;
+using VisualHFT.Commons.Helpers;
+using VisualHFT.Commons.WPF.ViewModel.Model;
 
 namespace VisualHFT.Studies.MarketRatios.ViewModel
 {
@@ -15,7 +14,7 @@ namespace VisualHFT.Studies.MarketRatios.ViewModel
     {
         private ObservableCollection<Provider> _providers;
         private ObservableCollection<string> _symbols;
-        private VisualHFT.ViewModel.Model.Provider _selectedProvider;
+        private Provider _selectedProvider;
         private int? _selectedProviderID;
         private string _selectedSymbol;
         private AggregationLevel _aggregationLevelSelection;
@@ -55,7 +54,7 @@ namespace VisualHFT.Studies.MarketRatios.ViewModel
         }
 
 
-        public ObservableCollection<VisualHFT.ViewModel.Model.Provider> Providers { get => _providers; set => _providers = value; }
+        public ObservableCollection<Provider> Providers { get => _providers; set => _providers = value; }
         public ObservableCollection<string> Symbols { get => _symbols; set => _symbols = value; }
 
         public int? SelectedProviderID
@@ -69,7 +68,7 @@ namespace VisualHFT.Studies.MarketRatios.ViewModel
                 LoadSelectedProviderID();
             }
         }
-        public VisualHFT.ViewModel.Model.Provider SelectedProvider
+        public Provider SelectedProvider
         {
             get => _selectedProvider;
             set
@@ -179,11 +178,11 @@ namespace VisualHFT.Studies.MarketRatios.ViewModel
             _symbols = new ObservableCollection<string>(HelperSymbol.Instance);
             OnPropertyChanged(nameof(Symbols));
         }
-        private void PROVIDERS_OnDataReceived(object? sender, VisualHFT.Model.Provider e)
+        private void PROVIDERS_OnDataReceived(object? sender, Commons.Model.Provider e)
         {
             Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() =>
             {
-                var item = new VisualHFT.ViewModel.Model.Provider(e);
+                var item = new Provider(e);
                 if (!_providers.Any(x => x.ProviderCode == e.ProviderCode))
                     _providers.Add(item);
                 if (_selectedProvider == null && e.Status == eSESSIONSTATUS.BOTH_CONNECTED) //default provider must be the first who's Active

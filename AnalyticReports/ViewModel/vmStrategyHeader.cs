@@ -1,17 +1,17 @@
 ﻿using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
-using VisualHFT.Model;
+using VisualHFT.Commons.Model;
 
 namespace VisualHFT.AnalyticReports.ViewModel
 {
     public class vmStrategyHeader : BindableBase
     {
-        public List<VisualHFT.Model.Position> Signals { get; set; }
+        public List<Position> Signals { get; set; }
         public string StrategyName { get; private set; }
         public string StrategyText { get; private set; }
 
-        public void LoadData(List<VisualHFT.Model.Position> signals)
+        public void LoadData(List<Position> signals)
         {
             this.Signals = signals;
             if (this.Signals == null || this.Signals.Count == 0)

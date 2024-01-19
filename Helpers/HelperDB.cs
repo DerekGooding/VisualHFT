@@ -6,6 +6,7 @@ using System.Configuration;
 using System.Text.RegularExpressions;
 using System.IO;
 using LumenWorks.Framework.IO.Csv;
+using VisualHFT.Commons.Extensions;
 
 
 public static class HelperDB

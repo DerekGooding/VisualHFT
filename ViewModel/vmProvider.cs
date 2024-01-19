@@ -9,6 +9,8 @@ using System.Windows.Threading;
 using System.Windows.Input;
 using VisualHFT.DataRetriever;
 using System.Threading.Tasks;
+using VisualHFT.Commons.Helpers;
+using VisualHFT.Commons.Model;
 
 namespace VisualHFT.ViewModel
 {
@@ -36,7 +38,7 @@ namespace VisualHFT.ViewModel
             RaisePropertyChanged(nameof(Providers));
         }
 
-        private void PROVIDERS_OnDataReceived(object? sender, VisualHFT.Model.Provider e)
+        private void PROVIDERS_OnDataReceived(object? sender, Provider e)
         {
             if (e == null || e.ProviderCode == -1)
                 return;
@@ -65,7 +67,7 @@ namespace VisualHFT.ViewModel
                 }));
             }
         }
-        private void PROVIDERS_OnHeartBeatFail(object? sender, VisualHFT.Model.Provider e)
+        private void PROVIDERS_OnHeartBeatFail(object? sender, Provider e)
         {
             var itemToUpdate = _providers.Where(x => x.ProviderCode == e.ProviderCode).FirstOrDefault();
             if (itemToUpdate != null)

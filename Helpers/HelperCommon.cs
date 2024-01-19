@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using VisualHFT.Commons.DataTradeRetriever;
+using VisualHFT.Commons.Extensions;
+using VisualHFT.Commons.Helpers;
 using VisualHFT.DataTradeRetriever;
 
 namespace VisualHFT.Helpers

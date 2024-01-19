@@ -8,6 +8,9 @@ using VisualHFT.Commons.Studies;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Data;
+using VisualHFT.Commons.Extensions;
+using VisualHFT.Commons.Helpers;
+using VisualHFT.Commons.PluginManager;
 
 namespace VisualHFT.ViewModel
 {
@@ -61,9 +64,9 @@ namespace VisualHFT.ViewModel
                         Tiles.Add(new vmTile(study as IMultiStudy));
                     }
                     //then, load custom UIs
-                    foreach (var study in PluginManager.PluginManager.AllPlugins.Where(x => x is PluginManager.IPlugin && x.GetCustomUI() != null))
+                    foreach (var study in PluginManager.PluginManager.AllPlugins.Where(x => x is IPlugin && x.GetCustomUI() != null))
                     {
-                        Tiles.Add(new vmTile(study as PluginManager.IPlugin));
+                        Tiles.Add(new vmTile(study as IPlugin));
                     }
                 });
             }

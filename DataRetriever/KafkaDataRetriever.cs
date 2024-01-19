@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Confluent.Kafka;
 using QuickFix;
+using VisualHFT.Commons.Helpers;
+using VisualHFT.Commons.Model;
 using VisualHFT.Model;
 
 namespace VisualHFT.DataRetriever
@@ -68,7 +70,7 @@ namespace VisualHFT.DataRetriever
             // Raise the OnDataReceived event
             OnDataReceived?.Invoke(this, new DataEventArgs { DataType = "Market", RawData = message, ParsedModel = model });
 
-            var provider = new VisualHFT.ViewModel.Model.Provider() { LastUpdated = HelperTimeProvider.Now, ProviderID = 2, ProviderName = "Kafka", Status = eSESSIONSTATUS.BOTH_CONNECTED };
+            var provider = new Provider() { LastUpdated = HelperTimeProvider.Now, ProviderID = 2, ProviderName = "Kafka", Status = eSESSIONSTATUS.BOTH_CONNECTED };
             // Raise the OnDataReceived event
             OnDataReceived?.Invoke(this, new DataEventArgs { DataType = "HeartBeats", RawData = message, ParsedModel = model });
         }

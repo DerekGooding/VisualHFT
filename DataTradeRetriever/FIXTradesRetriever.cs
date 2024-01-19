@@ -7,12 +7,14 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
-using VisualHFT.Helpers;
-using VisualHFT.Model;
 using QuickFix.Fields;
 using QuickFix.DataDictionary;
 using System.Windows.Shapes;
 using System.Windows;
+using VisualHFT.Commons.DataTradeRetriever;
+using VisualHFT.Commons.Extensions;
+using VisualHFT.Commons.Helpers;
+using VisualHFT.Commons.Model;
 
 namespace VisualHFT.DataTradeRetriever
 {
@@ -23,22 +25,22 @@ namespace VisualHFT.DataTradeRetriever
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private long _lastReadPosition = 0; // to keep track of where we left off reading the file
         private readonly string _logFilePath; // path to the QuickFIX log file
-        private List<VisualHFT.Model.Position> _positions;
-        private List<VisualHFT.Model.Order> _orders;
+        private List<Position> _positions;
+        private List<Order> _orders;
         int _providerId;
         string _providerName;
         DateTime? _sessionDate = null;
 
         private bool _disposed = false;
 
-        public event EventHandler<IEnumerable<VisualHFT.Model.Order>> OnInitialLoad;
-        public event EventHandler<IEnumerable<VisualHFT.Model.Order>> OnDataReceived;
-        protected virtual void RaiseOnInitialLoad(IEnumerable<VisualHFT.Model.Order> ord) => OnInitialLoad?.Invoke(this, ord);
-        protected virtual void RaiseOnDataReceived(IEnumerable<VisualHFT.Model.Order> ord) => OnDataReceived?.Invoke(this, ord);
+        public event EventHandler<IEnumerable<Order>> OnInitialLoad;
+        public event EventHandler<IEnumerable<Order>> OnDataReceived;
+        protected virtual void RaiseOnInitialLoad(IEnumerable<Order> ord) => OnInitialLoad?.Invoke(this, ord);
+        protected virtual void RaiseOnDataReceived(IEnumerable<Order> ord) => OnDataReceived?.Invoke(this, ord);
         public FIXTradesRetriever(string logFilePath, int providerId, string providerName)
         {
-            _positions = new List<VisualHFT.Model.Position>();
-            _orders = new List<VisualHFT.Model.Order>();
+            _positions = new List<Position>();
+            _orders = new List<Order>();
             _logFilePath = logFilePath;
             _providerId = providerId;
             _providerName = providerName;
@@ -106,19 +108,19 @@ namespace VisualHFT.DataTradeRetriever
                 }
             }
         }
-        public ReadOnlyCollection<VisualHFT.Model.Order> Orders
+        public ReadOnlyCollection<Order> Orders
         {
             get { return _orders.AsReadOnly(); }
         }
-        public ReadOnlyCollection<VisualHFT.Model.Position> Positions
+        public ReadOnlyCollection<Position> Positions
         {
             get { return _positions.AsReadOnly(); }
         }
 
-        private IEnumerable<VisualHFT.Model.Order> ParseTradesFromLogLines(IEnumerable<string> logLines)
+        private IEnumerable<Order> ParseTradesFromLogLines(IEnumerable<string> logLines)
         {
             StringBuilder _symbolBuilder = new StringBuilder(30);
-            var parsedOrders = new Dictionary<string, VisualHFT.Model.Order>();
+            var parsedOrders = new Dictionary<string, Order>();
             List<Dictionary<int, string>> _arr = new List<Dictionary<int, string>>();
 
             try
@@ -142,10 +144,11 @@ namespace VisualHFT.DataTradeRetriever
                 {
                     if (dicFIX[Tags.MsgType] == MsgType.NEWORDERSINGLE)  // New Order
                     {
-                        var order = new VisualHFT.Model.Order();
-
-                        order.CreationTimeStamp = dicFIX[Tags.SendingTime].ToDateTime();
-                        order.ClOrdId = dicFIX[Tags.ClOrdID];
+                        var order = new Order
+                        {
+                            CreationTimeStamp = dicFIX[Tags.SendingTime].ToDateTime(),
+                            ClOrdId = dicFIX[Tags.ClOrdID]
+                        };
                         if (dicFIX.ContainsKey(Tags.OrdStatus))
                             order.Status = ParseOrderStatus(dicFIX[Tags.OrdStatus]);
                         else
@@ -179,7 +182,7 @@ namespace VisualHFT.DataTradeRetriever
                         order.OrderType = ParseOrderType(dicFIX[Tags.OrdType]);
                         order.ProviderId = _providerId;
                         order.ProviderName = _providerName;
-                        order.Executions = new List<VisualHFT.Model.Execution>();
+                        order.Executions = new List<Execution>();
                         order.LastUpdated = HelperTimeProvider.Now;
                         parsedOrders.Add(order.ClOrdId, order);
                     }
@@ -189,7 +192,7 @@ namespace VisualHFT.DataTradeRetriever
                         string _clordId = dicFIX[Tags.ClOrdID];
                         string _orig_clordId = dicFIX[Tags.OrigClOrdID];
 
-                        VisualHFT.Model.Order order = null;
+                        Order order = null;
                         if (parsedOrders.TryGetValue(_orig_clordId, out order))
                         {
                             var exec = new OpenExecution() { Price = 0, QtyFilled = 0 };
@@ -204,7 +207,7 @@ namespace VisualHFT.DataTradeRetriever
                             exec.Price = 0;
                             exec.QtyFilled = 0;
                             order.LastUpdated = HelperTimeProvider.Now;
-                            order.Executions.Add(new VisualHFT.Model.Execution(exec, order.Symbol));
+                            order.Executions.Add(new Execution(exec, order.Symbol));
                         }
                         else
                         {
@@ -218,7 +221,7 @@ namespace VisualHFT.DataTradeRetriever
                         if (dicFIX.ContainsKey(Tags.OrigClOrdID))
                             _orig_clordId = dicFIX[Tags.OrigClOrdID];
 
-                        VisualHFT.Model.Order order = null;
+                        Order order = null;
                         if (parsedOrders.TryGetValue(_orig_clordId == "" ? _clordId : _orig_clordId, out order))
                         {
                             var exec = new OpenExecution() { Price = 0, QtyFilled = 0 };

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace VisualHFT.ViewModel.Model
 {
     [AddINotifyPropertyChangedInterface]
-    public class Order: VisualHFT.Model.Order
+    public class Order: Commons.Model.Order
     {
 
     }

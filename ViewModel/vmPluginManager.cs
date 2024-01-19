@@ -8,6 +8,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using VisualHFT.Commons.PluginManager;
 using VisualHFT.PluginManager;
 
 namespace VisualHFT.ViewModel

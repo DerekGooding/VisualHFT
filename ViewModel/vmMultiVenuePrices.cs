@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
+using VisualHFT.Commons.Helpers;
+using VisualHFT.Commons.Model;
 using VisualHFT.Helpers;
 using VisualHFT.Model;
 

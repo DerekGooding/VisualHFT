@@ -7,6 +7,7 @@ using System.Globalization;
 using Newtonsoft.Json;
 using VisualHFT.Model;
 using System.Web;
+using VisualHFT.Commons.Model;
 
 namespace VisualHFT.Helpers
 {

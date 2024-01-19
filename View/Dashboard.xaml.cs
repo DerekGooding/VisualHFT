@@ -13,10 +13,10 @@ using System.Collections.ObjectModel;
 using System.Windows.Documents;
 using System.Collections.Generic;
 using VisualHFT.ViewModel;
-using VisualHFT.UserSettings;
 using System.Threading.Tasks;
 using System.Globalization;
 using System.Windows.Markup;
+using VisualHFT.Commons.UserSettings;
 
 namespace VisualHFT
 {

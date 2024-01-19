@@ -2,48 +2,50 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using VisualHFT.Commons.Extensions;
+using VisualHFT.Commons.Model;
 
 namespace VisualHFT.Helpers
 {
     public class HelperAnalytics
     {
-        public static List<cEquity> GetEquityCurve(List<VisualHFT.Model.Position> aSignal)
+        public static List<cEquity> GetEquityCurve(List<Position> aSignal)
         {
             return Helpers.HelperPositionAnalysis.GetEquityCurve(aSignal);
         }
-        public static List<cEquity> GetEquityCurveByHour(List<VisualHFT.Model.Position> aSignal)
+        public static List<cEquity> GetEquityCurveByHour(List<Position> aSignal)
         {
             return Helpers.HelperPositionAnalysis.GetEquityCurveByHour(aSignal);
         }
-        public static List<cEquity> GetEquityCurveByDay(List<VisualHFT.Model.Position> aSignal)
+        public static List<cEquity> GetEquityCurveByDay(List<Position> aSignal)
         {
             return Helpers.HelperPositionAnalysis.GetEquityCurveByDay(aSignal);
         }
-        public static List<cBalance> GetBalanceCurve(List<VisualHFT.Model.Position> aSignal)
+        public static List<cBalance> GetBalanceCurve(List<Position> aSignal)
         {
             List<cBalance> aBalance = Helpers.HelperPositionAnalysis.GetBalanceCurve(aSignal);
             return aBalance;
         }
-        public static List<KeyValuePair<decimal, VisualHFT.Model.Position>> GetMaximumAdversExcursion(List<VisualHFT.Model.Position> aSignal)
+        public static List<KeyValuePair<decimal, Position>> GetMaximumAdversExcursion(List<Position> aSignal)
         {
-            List<KeyValuePair<decimal, VisualHFT.Model.Position>> aRet = new List<KeyValuePair<decimal, VisualHFT.Model.Position>>();
-            foreach (VisualHFT.Model.Position s in aSignal)
+            List<KeyValuePair<decimal, Position>> aRet = new List<KeyValuePair<decimal, Position>>();
+            foreach (Position s in aSignal)
             {
-                aRet.Add(new KeyValuePair<decimal, VisualHFT.Model.Position>(s.MaxDrowdown, s));
+                aRet.Add(new KeyValuePair<decimal, Position>(s.MaxDrowdown, s));
             }
             return aRet;
         }
-        public static List<KeyValuePair<decimal, VisualHFT.Model.Position>> GetMaximumFavorableExcursion(List<VisualHFT.Model.Position> aSignal)
+        public static List<KeyValuePair<decimal, Position>> GetMaximumFavorableExcursion(List<Position> aSignal)
         {
-            List<KeyValuePair<decimal, VisualHFT.Model.Position>> aRet = new List<KeyValuePair<decimal, VisualHFT.Model.Position>>();
-            foreach (VisualHFT.Model.Position s in aSignal)
+            List<KeyValuePair<decimal, Position>> aRet = new List<KeyValuePair<decimal, Position>>();
+            foreach (Position s in aSignal)
             {
-                aRet.Add(new KeyValuePair<decimal, VisualHFT.Model.Position>(s.UnrealizedPnL, s));
+                aRet.Add(new KeyValuePair<decimal, Position>(s.UnrealizedPnL, s));
             }
             return aRet;
         }
 
-        public static double GetMaximumDrawdownPerc(List<VisualHFT.Model.Position> aSignal, bool calculateIntraday = true)
+        public static double GetMaximumDrawdownPerc(List<Position> aSignal, bool calculateIntraday = true)
         {
             var drawDowns = GetDrawdowns(aSignal, calculateIntraday);
             if (drawDowns != null && drawDowns.Any())
@@ -55,7 +57,7 @@ namespace VisualHFT.Helpers
                 return 0;
             }
         }
-        public static List<cDrawDown> GetDrawdowns(List<VisualHFT.Model.Position> aSignal, bool calculateIntraday = true)
+        public static List<cDrawDown> GetDrawdowns(List<Position> aSignal, bool calculateIntraday = true)
         {
             List<cEquity> aTransactions = null;
 			if (calculateIntraday)
@@ -112,7 +114,7 @@ namespace VisualHFT.Helpers
 			return aDrawDowns;
 		}
 
-		public static List<KeyValuePair<int, List<cEquity>>> GetStagnationsInHours(List<VisualHFT.Model.Position> aSignal)
+		public static List<KeyValuePair<int, List<cEquity>>> GetStagnationsInHours(List<Position> aSignal)
         {
             List<cEquity> aTransactions = GetEquityCurveByHour(aSignal);
             List<KeyValuePair<int, List<cEquity>>> aStagnations = new List<KeyValuePair<int, List<cEquity>>>();
@@ -132,7 +134,7 @@ namespace VisualHFT.Helpers
             }
             return aStagnations;
         }
-        public static List<KeyValuePair<int, List<cEquity>>> GetStagnationsInMinutes(List<VisualHFT.Model.Position> aSignal)
+        public static List<KeyValuePair<int, List<cEquity>>> GetStagnationsInMinutes(List<Position> aSignal)
         {
             List<cEquity> aTransactions = GetEquityCurve(aSignal);
             List<KeyValuePair<int, List<cEquity>>> aStagnations = new List<KeyValuePair<int, List<cEquity>>>();
@@ -153,7 +155,7 @@ namespace VisualHFT.Helpers
             return aStagnations;
         }
 
-        public static double GetSharpeRatio(List<VisualHFT.Model.Position> aSignal)
+        public static double GetSharpeRatio(List<Position> aSignal)
         {
             List<cEquity> aEquity = GetEquityCurveByDay(aSignal);
             List<double> aPLs = new List<double>();
@@ -174,7 +176,7 @@ namespace VisualHFT.Helpers
             else
                 return 0;
         }
-        public static double GetIntradaySharpeRatio(List<VisualHFT.Model.Position> aSignal)
+        public static double GetIntradaySharpeRatio(List<Position> aSignal)
         {
             double qtyTrades = aSignal.Count();
             double meanPnL = aSignal.Average(x => (double)x.PipsPnLInCurrency.Value);
@@ -183,13 +185,13 @@ namespace VisualHFT.Helpers
             double SHARPE = Math.Sqrt(qtyTrades) * (meanPnL / stdev);
             return SHARPE;
         }
-        public static double GetAHPR(List<VisualHFT.Model.Position> aSignal)
+        public static double GetAHPR(List<Position> aSignal)
         {
 			var equity = GetEquityCurveByHour(aSignal);
 			double aHPR = (double)((equity.Last().Equity - equity.First().Equity) / equity.First().Equity);
 			return aHPR;
 		}
-        public static double GetCAGR(List<VisualHFT.Model.Position> aSignal)
+        public static double GetCAGR(List<Position> aSignal)
         {
             List<cEquity> yearlyEquity = GetEquityCurve(aSignal);
             if (yearlyEquity != null)
@@ -201,7 +203,7 @@ namespace VisualHFT.Helpers
             }
             return double.NaN;
         }
-        public static double GetZScore(List<VisualHFT.Model.Position> aSignal)
+        public static double GetZScore(List<Position> aSignal)
         {
             /*
              * METHOD from 
@@ -235,7 +237,7 @@ namespace VisualHFT.Helpers
             double Z_Score = (N * (R - 0.5) - X) / Math.Sqrt((X * (X - N)) / (N - 1));
             return Z_Score;
         }
-        public static double GetZProbability(List<VisualHFT.Model.Position> aSignal)
+        public static double GetZProbability(List<Position> aSignal)
         {
             double Z_MAX = 6;
             double z = Math.Abs(GetZScore(aSignal));
@@ -284,7 +286,7 @@ namespace VisualHFT.Helpers
 
             return Math.Abs(1 - tp);
         }
-        public static List<int> GetConsecutiveWins(List<VisualHFT.Model.Position> aSignal)
+        public static List<int> GetConsecutiveWins(List<Position> aSignal)
         {
             List<int> aRet = new List<int>();
             int iCount = 0;
@@ -303,7 +305,7 @@ namespace VisualHFT.Helpers
             }
             return aRet;
         }
-        public static List<int> GetConsecutiveLosses(List<VisualHFT.Model.Position> aSignal)
+        public static List<int> GetConsecutiveLosses(List<Position> aSignal)
         {
             List<int> aRet = new List<int>();
             int iCount = 0;
@@ -322,7 +324,7 @@ namespace VisualHFT.Helpers
             }
             return aRet;
         }
-        public static double GetExpectancy(List<VisualHFT.Model.Position> aSignal)
+        public static double GetExpectancy(List<Position> aSignal)
         {
 			//(Average Winner x Win Rate) – (Average Loser x Loss Rate)
 			var avgWinner = (double)aSignal.Where(x => x.PipsPnLInCurrency.HasValue && x.PipsPnLInCurrency.Value >= 0).DefaultIfEmpty(new VisualHFT.Model.Position() { PipsPnLInCurrency = 0 }).Average(x => x.PipsPnLInCurrency.Value);
@@ -333,7 +335,7 @@ namespace VisualHFT.Helpers
             return (avgWinner * winRate) - (avgLosser * lossRate);
         }        
 
-		public static cEquity GetAverageProfitByHour(List<VisualHFT.Model.Position> aSignal)
+		public static cEquity GetAverageProfitByHour(List<Position> aSignal)
 		{
 			List<cEquity> hourlyEquity = HelperAnalytics.GetEquityCurveByHour(aSignal);
 			double avgHourlyPnL = 0;
@@ -355,7 +357,7 @@ namespace VisualHFT.Helpers
 			};
 
 		}
-		public static cEquity GetAverageProfitByDay(List<VisualHFT.Model.Position> aSignal)
+		public static cEquity GetAverageProfitByDay(List<Position> aSignal)
 		{
 			List<cEquity> hourlyEquity = HelperAnalytics.GetEquityCurveByDay(aSignal);
 			double avgHourlyPnL = 0;

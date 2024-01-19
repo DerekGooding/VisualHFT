@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace VisualHFT.UserSettings
+﻿namespace VisualHFT.Commons.UserSettings
 {
     public enum SettingKey
     {
@@ -18,7 +12,7 @@ namespace VisualHFT.UserSettings
 
 }
 namespace VisualHFT.PluginManager
-{ 
+{
     public enum ePluginStatus
     {
         LOADED,

@@ -1,12 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Threading;
+using VisualHFT.Commons.Helpers;
+using VisualHFT.Commons.Model;
 using VisualHFT.Helpers;
 using VisualHFT.Model;
 
@@ -84,7 +83,7 @@ namespace VisualHFT.DataRetriever
                     }
                     break;
                 case "ActiveOrders":
-                    ParseActiveOrders(e.ParsedModel as List<VisualHFT.Model.Order>);
+                    ParseActiveOrders(e.ParsedModel as List<Order>);
                     break;
                 case "Strategies":
                     ParseActiveStrategies(e.ParsedModel as List<StrategyVM>);
@@ -93,7 +92,7 @@ namespace VisualHFT.DataRetriever
                     ParseExposures(e.ParsedModel as List<Exposure>);
                     break;
                 case "HeartBeats":
-                    ParseHeartBeat(e.ParsedModel as List<VisualHFT.Model.Provider>);
+                    ParseHeartBeat(e.ParsedModel as List<Provider>);
                     break;
                 case "Trades":
                     ParseTrades(e.ParsedModel as List<Trade>);
@@ -114,22 +113,22 @@ namespace VisualHFT.DataRetriever
         }
         private void ParseExposures(IEnumerable<Exposure> exposures)
         {
-            HelperCommon.EXPOSURES.UpdateData(exposures);
+            Helpers.HelperCommon.EXPOSURES.UpdateData(exposures);
         }
-        private void ParseActiveOrders(IEnumerable<VisualHFT.Model.Order> activeOrders)
+        private void ParseActiveOrders(IEnumerable<Order> activeOrders)
         {
-            HelperCommon.ACTIVEORDERS.UpdateData(activeOrders.ToList());
+            Helpers.HelperCommon.ACTIVEORDERS.UpdateData(activeOrders.ToList());
         }
         private void ParseActiveStrategies(IEnumerable<StrategyVM> activeStrategies)
         {
-            HelperCommon.ACTIVESTRATEGIES.UpdateData(activeStrategies.ToList());
+            Helpers.HelperCommon.ACTIVESTRATEGIES.UpdateData(activeStrategies.ToList());
         }
         private void ParseStrategyParams(string data)
         {
-            HelperCommon.STRATEGYPARAMS.RaiseOnDataUpdateReceived(data);
+            Helpers.HelperCommon.STRATEGYPARAMS.RaiseOnDataUpdateReceived(data);
 
         }
-        private void ParseHeartBeat(IEnumerable<VisualHFT.Model.Provider> providers)
+        private void ParseHeartBeat(IEnumerable<Provider> providers)
         {
             HelperProvider.Instance.UpdateData(providers.ToList());
         }

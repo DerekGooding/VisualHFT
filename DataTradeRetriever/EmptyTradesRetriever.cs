@@ -8,32 +8,33 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using VisualHFT.Helpers;
-using VisualHFT.Model;
 using QuickFix.Fields;
 using QuickFix.DataDictionary;
 using System.Windows.Shapes;
+using VisualHFT.Commons.DataTradeRetriever;
+using VisualHFT.Commons.Model;
 
 
 namespace VisualHFT.DataTradeRetriever
 {
     public class EmptyTradesRetriever : IDataTradeRetriever, IDisposable
     {
-        private List<VisualHFT.Model.Position> _positions;
-        private List<VisualHFT.Model.Order> _orders;
+        private List<Position> _positions;
+        private List<Order> _orders;
         int _providerId;
         string _providerName;
         DateTime? _sessionDate = null;
 
         private bool _disposed = false;
 
-        public event EventHandler<IEnumerable<VisualHFT.Model.Order>> OnInitialLoad;
-        public event EventHandler<IEnumerable<VisualHFT.Model.Order>> OnDataReceived;
-        protected virtual void RaiseOnInitialLoad(IEnumerable<VisualHFT.Model.Order> ord) => OnInitialLoad?.Invoke(this, ord);
-        protected virtual void RaiseOnDataReceived(IEnumerable<VisualHFT.Model.Order> ord) => OnDataReceived?.Invoke(this, ord);
+        public event EventHandler<IEnumerable<Order>> OnInitialLoad;
+        public event EventHandler<IEnumerable<Order>> OnDataReceived;
+        protected virtual void RaiseOnInitialLoad(IEnumerable<Order> ord) => OnInitialLoad?.Invoke(this, ord);
+        protected virtual void RaiseOnDataReceived(IEnumerable<Order> ord) => OnDataReceived?.Invoke(this, ord);
         public EmptyTradesRetriever()
         {
-            _positions = new List<VisualHFT.Model.Position>();
-            _orders = new List<VisualHFT.Model.Order>();
+            _positions = new List<Position>();
+            _orders = new List<Order>();
         }
         ~EmptyTradesRetriever()
         {
@@ -52,11 +53,11 @@ namespace VisualHFT.DataTradeRetriever
                 }
             }
         }
-        public ReadOnlyCollection<VisualHFT.Model.Order> Orders
+        public ReadOnlyCollection<Order> Orders
         {
             get { return _orders.AsReadOnly(); }
         }
-        public ReadOnlyCollection<VisualHFT.Model.Position> Positions
+        public ReadOnlyCollection<Position> Positions
         {
             get { return _positions.AsReadOnly(); }
         }

@@ -7,6 +7,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Threading;
+using VisualHFT.Commons.Helpers;
+using VisualHFT.Commons.Model;
 using VisualHFT.Helpers;
 using VisualHFT.Model;
 
@@ -27,14 +29,14 @@ namespace VisualHFT.ViewModel
         private IEnumerable<OrderBookLevel> _realTimeOrderLevelsAsk;
         private IEnumerable<OrderBookLevel> _realTimeOrderLevelsBid;
         private AggregatedCollection<PlotInfoPriceChart> _realTimeSpread;
-        private ObservableCollection<VisualHFT.ViewModel.Model.Trade> _realTimeTrades;
+        private ObservableCollection<Trade> _realTimeTrades;
         private ObservableCollection<BookItem> _bidsGrid;
         private ObservableCollection<BookItem> _asksGrid;
         private ObservableCollection<BookItem> _depthGrid;
 
-        private ObservableCollection<VisualHFT.ViewModel.Model.Provider> _providers;
+        private ObservableCollection<Provider> _providers;
         private string _selectedSymbol;
-        private VisualHFT.ViewModel.Model.Provider _selectedProvider = null;
+        private Provider _selectedProvider = null;
         private string _layerName;
         private double _maxOrderSize = 0;
         private double _minOrderSize = 0;
@@ -179,7 +181,7 @@ namespace VisualHFT.ViewModel
             existing.BuyActiveOrder = newItem.BuyActiveOrder;
             existing.SellActiveOrder = newItem.SellActiveOrder;
         }
-        private void ACTIVEORDERS_OnDataRemoved(object sender, VisualHFT.Model.Order e)
+        private void ACTIVEORDERS_OnDataRemoved(object sender, Order e)
         {
             if (_selectedProvider == null || string.IsNullOrEmpty(_selectedSymbol) || _selectedProvider.ProviderCode != e.ProviderId)
                 return;
@@ -205,7 +207,7 @@ namespace VisualHFT.ViewModel
                 }
             }
         }
-        private void ACTIVEORDERS_OnDataReceived(object sender, VisualHFT.Model.Order e)
+        private void ACTIVEORDERS_OnDataReceived(object sender, Order e)
         {
             if (_selectedProvider == null || string.IsNullOrEmpty(_selectedSymbol) || _selectedProvider.ProviderCode != e.ProviderId)
                 return;
@@ -409,7 +411,7 @@ namespace VisualHFT.ViewModel
                     _depthGrid.Add(item);
             }
         }
-        private void TRADES_OnDataReceived(VisualHFT.Model.Trade e)
+        private void TRADES_OnDataReceived(Trade e)
         {
             if (e == null)
                 return;
@@ -429,7 +431,7 @@ namespace VisualHFT.ViewModel
                 }));
             }
         }
-        private void PROVIDERS_OnDataReceived(object? sender, VisualHFT.Model.Provider e)
+        private void PROVIDERS_OnDataReceived(object? sender, Provider e)
         {
             Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() =>
             {
@@ -441,7 +443,7 @@ namespace VisualHFT.ViewModel
                     SelectedProvider = item;
             }));
         }
-        private void PROVIDERS_OnHeartBeatFail(object? sender, VisualHFT.Model.Provider e)
+        private void PROVIDERS_OnHeartBeatFail(object? sender, Provider e)
         {
             if (_selectedProvider != null && e.ProviderCode == _selectedProvider.ProviderCode && _selectedProvider.Status != e.Status && (e.Status == eSESSIONSTATUS.PRICE_DSICONNECTED_ORDER_CONNECTED || e.Status == eSESSIONSTATUS.BOTH_DISCONNECTED))
             {
@@ -459,7 +461,7 @@ namespace VisualHFT.ViewModel
             set => SetProperty(ref _selectedSymbol, value, onChanged: () => Clear());
 
         }
-        public VisualHFT.ViewModel.Model.Provider SelectedProvider
+        public Provider SelectedProvider
         {
             get => _selectedProvider;
             set => SetProperty(ref _selectedProvider, value, onChanged: () => Clear());
@@ -473,7 +475,7 @@ namespace VisualHFT.ViewModel
         public IEnumerable<OrderBookLevel> RealTimeOrderLevelsAsk => _realTimeOrderLevelsAsk;
         public IEnumerable<OrderBookLevel> RealTimeOrderLevelsBid => _realTimeOrderLevelsBid;
         public ReadOnlyCollection<PlotInfoPriceChart> RealTimeSpread => _realTimeSpread?.AsReadOnly();
-        public ObservableCollection<VisualHFT.ViewModel.Model.Provider> Providers => _providers;
+        public ObservableCollection<Provider> Providers => _providers;
         public Model.BookItemPriceSplit BidTOB_SPLIT
         {
             get => _BidTOB_SPLIT;

@@ -3,7 +3,6 @@ using System;
 using System.Windows.Input;
 using System.Windows;
 using VisualHFT.Helpers;
-using VisualHFT.Model;
 using VisualHFT.UserSettings;
 using VisualHFT.ViewModels;
 using System.Windows.Media;
@@ -11,6 +10,8 @@ using VisualHFT.Commons.Studies;
 using VisualHFT.View;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
+using VisualHFT.Commons.Model;
+using VisualHFT.Commons.PluginManager;
 
 namespace VisualHFT.ViewModel
 {
@@ -34,7 +35,7 @@ namespace VisualHFT.ViewModel
         //*********************************************************
         private IStudy _study;
         private IMultiStudy _multiStudy;
-        private PluginManager.IPlugin _plugin;
+        private IPlugin _plugin;
         //*********************************************************
         //*********************************************************
 
@@ -42,7 +43,7 @@ namespace VisualHFT.ViewModel
         private SolidColorBrush _valueColor = Brushes.White;
         private UserControl _customControl;
 
-        public vmTile(PluginManager.IPlugin plugin)
+        public vmTile(IPlugin plugin)
         {
             _plugin = plugin;
             _customControl = _plugin.GetCustomUI() as UserControl;
@@ -75,7 +76,7 @@ namespace VisualHFT.ViewModel
                 ChildTiles.Add(new vmTile(study) { SettingButtonVisibility = Visibility.Hidden, ChartButtonVisibility = Visibility.Hidden });
             }
 
-            _tile_id = ((PluginManager.IPlugin)_multiStudy).GetPluginUniqueID();
+            _tile_id = ((IPlugin)_multiStudy).GetPluginUniqueID();
             _title = _multiStudy.TileTitle;
             _tooltip = _multiStudy.TileToolTip;
             _value = ".";
@@ -99,7 +100,7 @@ namespace VisualHFT.ViewModel
             IsGroup = false;
 
             _study = study;
-            _tile_id = ((PluginManager.IPlugin)_study).GetPluginUniqueID();
+            _tile_id = ((IPlugin)_study).GetPluginUniqueID();
             _title = _study.TileTitle;
             _tooltip = _study.TileToolTip;
             _value = ".";
@@ -170,9 +171,9 @@ namespace VisualHFT.ViewModel
             get
             {
                 if (_study != null)
-                    return ((VisualHFT.PluginManager.IPlugin)_study).Settings.Symbol;
+                    return ((IPlugin)_study).Settings.Symbol;
                 else if (_multiStudy != null)
-                    return ((VisualHFT.PluginManager.IPlugin)_multiStudy).Settings.Symbol;
+                    return ((IPlugin)_multiStudy).Settings.Symbol;
                 else
                     return "";
             }
@@ -182,9 +183,9 @@ namespace VisualHFT.ViewModel
             get
             {
                 if (_study != null)
-                    return ((VisualHFT.PluginManager.IPlugin)_study).Settings.Provider.ProviderName;
+                    return ((IPlugin)_study).Settings.Provider.ProviderName;
                 else if (_multiStudy != null)
-                    return ((VisualHFT.PluginManager.IPlugin)_multiStudy).Settings.Provider.ProviderName;
+                    return ((IPlugin)_multiStudy).Settings.Provider.ProviderName;
                 else
                     return "";
             }
@@ -237,10 +238,10 @@ namespace VisualHFT.ViewModel
         private void OpenSettings(object obj)
         {
             if (_study != null)
-                PluginManager.PluginManager.SettingPlugin((PluginManager.IPlugin)_study);
+                PluginManager.PluginManager.SettingPlugin((IPlugin)_study);
             else if (_multiStudy != null)
             {
-                PluginManager.PluginManager.SettingPlugin((PluginManager.IPlugin)_multiStudy);
+                PluginManager.PluginManager.SettingPlugin((IPlugin)_multiStudy);
                 foreach (var child in ChildTiles)
                 {
                     child.UpdateAllUI();

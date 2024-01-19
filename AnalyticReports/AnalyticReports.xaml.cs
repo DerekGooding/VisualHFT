@@ -5,10 +5,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Printing;
-using VisualHFT.Model;
 using VisualHFT.Helpers;
 using VisualHFT.AnalyticReports.ViewModel;
 using VisualHFT.AnalyticReports.View;
+using VisualHFT.Commons.Model;
 
 namespace VisualHFT.AnalyticReport
 {
@@ -17,7 +17,7 @@ namespace VisualHFT.AnalyticReport
     /// </summary>
     public partial class AnalyticReport : Window
     {
-        public List<VisualHFT.Model.Position> Signals
+        public List<Position> Signals
         {
             get { return this.originalSignal.ToList(); }
             set
@@ -25,7 +25,7 @@ namespace VisualHFT.AnalyticReport
                 this.originalSignal = value;                    
             }
         }
-        public List<VisualHFT.Model.Position> originalSignal { get; set; }
+        public List<Position> originalSignal { get; set; }
 
         public AnalyticReport()
         {

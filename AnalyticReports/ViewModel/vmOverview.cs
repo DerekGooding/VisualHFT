@@ -2,14 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using VisualHFT.Commons.Model;
 using VisualHFT.Helpers;
-using VisualHFT.Model;
 
 namespace VisualHFT.AnalyticReports.ViewModel
 {
     public class vmOverview : BindableBase
     {
-        public List<VisualHFT.Model.Position> Signals { get; set; }
+        public List<Position> Signals { get; set; }
 
         public string VolumeTraded { get; private set; }
         public string NumTrades { get; private set; }
@@ -25,7 +25,7 @@ namespace VisualHFT.AnalyticReports.ViewModel
         public string HourlyAvgTrades { get; private set; }
         public string tTestValue { get; private set; }
 
-        public void LoadData(List<VisualHFT.Model.Position> signals)
+        public void LoadData(List<Position> signals)
         {
             //if (ValuesChanged != null)
             //    ValuesChanged(this, new EventArgs(), 0, 0);

@@ -3,9 +3,9 @@
 namespace VisualHFT.ViewModel.Model
 {
     [AddINotifyPropertyChangedInterface]
-    public class Trade : VisualHFT.Model.Trade
+    public class Trade : Commons.Model.Trade
     {
-        public Trade(VisualHFT.Model.Trade t)
+        public Trade(Commons.Model.Trade t)
         {
             if (t == null)
                 return;

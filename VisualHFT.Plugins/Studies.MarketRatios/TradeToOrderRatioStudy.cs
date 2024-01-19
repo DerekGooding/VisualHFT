@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
+﻿using Studies.MarketRatios.Model;
+using System;
 using System.Linq;
+using VisualHFT.Commons.Helpers;
+using VisualHFT.Commons.Model;
 using VisualHFT.Commons.PluginManager;
-using VisualHFT.Commons.Pools;
+using VisualHFT.Commons.UserSettings;
 using VisualHFT.Helpers;
-using VisualHFT.Model;
-using VisualHFT.PluginManager;
-using VisualHFT.Studies.MarketRatios.Model;
 using VisualHFT.Studies.MarketRatios.UserControls;
 using VisualHFT.Studies.MarketRatios.ViewModel;
-using VisualHFT.UserSettings;
 
 namespace VisualHFT.Studies
 {

@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using VisualHFT.Commons.Extensions;
+using VisualHFT.Commons.Model;
 using VisualHFT.Helpers;
 using VisualHFT.Model;
 
@@ -9,7 +11,7 @@ namespace VisualHFT.AnalyticReports.ViewModel
 {
     public class vmStats : BindableBase
     {
-        public List<VisualHFT.Model.Position> Signals { get; set; }
+        public List<Position> Signals { get; set; }
         public string WinLosses { get; private set; }
         public string PayoutRatio { get; private set; }
         public string AvgBarsTrade { get; private set; }
@@ -36,7 +38,7 @@ namespace VisualHFT.AnalyticReports.ViewModel
         public string AvgNumBarsInWins { get; private set; }
         public string AvgNumBarsInLosses { get; private set; }
 
-        public void LoadData(List<VisualHFT.Model.Position> signals)
+        public void LoadData(List<Position> signals)
         {
             this.Signals = signals;
             if (this.Signals == null || this.Signals.Count == 0)

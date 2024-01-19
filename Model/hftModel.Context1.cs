@@ -12,6 +12,7 @@ namespace VisualHFT.Model
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using VisualHFT.Commons.Model;
 
     public partial class HFTEntities : System.Data.Entity.DbContext
     {

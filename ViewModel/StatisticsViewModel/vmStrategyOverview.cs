@@ -6,6 +6,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Prism.Mvvm;
+using VisualHFT.Commons.Extensions;
+using VisualHFT.Commons.Model;
 
 namespace VisualHFT.ViewModel.StatisticsViewModel
 {
@@ -13,17 +15,17 @@ namespace VisualHFT.ViewModel.StatisticsViewModel
     public class vmStrategyOverview : BindableBase
     {
 
-        private ObservableCollection<VisualHFT.Model.Position> _positions;
+        private ObservableCollection<Position> _positions;
         public vmStrategyOverview()
         {
-            _positions = new ObservableCollection<VisualHFT.Model.Position>();
+            _positions = new ObservableCollection<Position>();
             BlankFields();
         }
 
         private Dictionary<string, Func<string, string, bool>> _dialogs;
         public vmStrategyOverview(Dictionary<string, Func<string, string, bool>> dialogs)
         {
-            _positions = new ObservableCollection<VisualHFT.Model.Position>();
+            _positions = new ObservableCollection<Position>();
             _dialogs = dialogs;
             BlankFields();
         }
@@ -137,14 +139,14 @@ namespace VisualHFT.ViewModel.StatisticsViewModel
             get => _loserCount;
             set => SetProperty(ref _loserCount, value);
         }
-        public ObservableCollection<VisualHFT.Model.Position> Positions => _positions;
-        public void AddNewPositions(IEnumerable<VisualHFT.Model.Position> pos)
+        public ObservableCollection<Position> Positions => _positions;
+        public void AddNewPositions(IEnumerable<Position> pos)
         {
             foreach (var position in pos)
                 _positions.Add(position);
             CalculatePositionStats();
         }
-        public void AddNewPosition(VisualHFT.Model.Position p)
+        public void AddNewPosition(Position p)
         {
             _positions.Add(p);
             CalculatePositionStats();

@@ -2,12 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using VisualHFT.Commons.Model;
 
 namespace VisualHFT.Helpers
 {
     public class HelperPositionAnalysis
     {
-        public static List<cEquity> GetEquityCurve(List<VisualHFT.Model.Position> aPositions)
+        public static List<cEquity> GetEquityCurve(List<Position> aPositions)
         {
             if (aPositions == null || aPositions.Count == 0)
                 return null;
@@ -27,7 +28,7 @@ namespace VisualHFT.Helpers
             }
             return dRet;
         }
-        public static List<cEquity> GetEquityCurveByHour(List<VisualHFT.Model.Position> aPositions)
+        public static List<cEquity> GetEquityCurveByHour(List<Position> aPositions)
         {
             var curve = GetEquityCurve(aPositions);
             var hourlyPL = from c in curve.OrderBy(x => x.Date)
@@ -40,7 +41,7 @@ namespace VisualHFT.Helpers
                            };
             return hourlyPL.ToList();
         }
-        public static List<cEquity> GetEquityCurveByDay(List<VisualHFT.Model.Position> aSignal)
+        public static List<cEquity> GetEquityCurveByDay(List<Position> aSignal)
         {
             List<cEquity> aEquity = GetEquityCurve(aSignal);
             var hourly = from x in aEquity.OrderBy(x => x.Date)
@@ -57,7 +58,7 @@ namespace VisualHFT.Helpers
 
 
 
-        public static List<cBalance> GetBalanceCurve(List<VisualHFT.Model.Position> aPositions)
+        public static List<cBalance> GetBalanceCurve(List<Position> aPositions)
         {
             if (aPositions == null || aPositions.Count == 0)
                 return null;
@@ -79,7 +80,7 @@ namespace VisualHFT.Helpers
             }
             return dRet;
         }
-        public static List<cBalance> GetBalanceCurveByHour(List<VisualHFT.Model.Position> aPositions)
+        public static List<cBalance> GetBalanceCurveByHour(List<Position> aPositions)
         {
             var curve = GetBalanceCurve(aPositions);
             var hourlyPL = from c in curve.OrderBy(x => x.Date)

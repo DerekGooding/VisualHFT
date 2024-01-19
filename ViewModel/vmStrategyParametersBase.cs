@@ -8,6 +8,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using Prism.Mvvm;
+using VisualHFT.Commons.Extensions;
+using VisualHFT.Commons.Helpers;
+using VisualHFT.Commons.Model;
 
 namespace VisualHFT.ViewModel
 {
@@ -23,7 +26,7 @@ namespace VisualHFT.ViewModel
         protected vmStrategyOverview _vmStrategyOverview;
         protected string _cmdStartImage;
         protected string _cmdStopImage;
-        protected ObservableCollection<VisualHFT.Model.Position> _positions;
+        protected ObservableCollection<Position> _positions;
         protected Dictionary<string, Func<string, string, bool>> _dialogs;
         protected BackgroundWorker bwGetParameters = new BackgroundWorker();
         protected BackgroundWorker bwSetParameters = new BackgroundWorker();
@@ -50,7 +53,7 @@ namespace VisualHFT.ViewModel
             cmdUpdate = new RelayCommand<object>(DoUpdate);
             cmdSaveToDB = new RelayCommand<object>(DoSaveToDB);
 
-            _positions = new ObservableCollection<VisualHFT.Model.Position>();
+            _positions = new ObservableCollection<Position>();
             RaisePropertyChanged(nameof(Positions));
         }
         public virtual void Load()
@@ -79,7 +82,7 @@ namespace VisualHFT.ViewModel
         public RelayCommand<object> cmdStart { get; set; }
         public RelayCommand<object> cmdStop { get; set; }
         public RelayCommand<object> cmdUpdate { get; set; }
-        public ObservableCollection<VisualHFT.Model.Position> Positions
+        public ObservableCollection<Position> Positions
         {
             get => _positions;
             set => SetProperty(ref _positions, value);
@@ -393,20 +396,20 @@ namespace VisualHFT.ViewModel
                 return;
             }
 
-            var closedPositions = new List<VisualHFT.Model.Position>(); //HelperCommon.CLOSEDPOSITIONS.Positions.Where(x => x.Symbol == _selectedSymbol && x.StrategyCode == _selectedStrategy).ToList();
-            _positions = new ObservableCollection<VisualHFT.Model.Position>(closedPositions.OrderByDescending(x => x.CloseTimeStamp));
+            var closedPositions = new List<Position>(); //HelperCommon.CLOSEDPOSITIONS.Positions.Where(x => x.Symbol == _selectedSymbol && x.StrategyCode == _selectedStrategy).ToList();
+            _positions = new ObservableCollection<Position>(closedPositions.OrderByDescending(x => x.CloseTimeStamp));
             _vmStrategyOverview.AddNewPositions(_positions);
 
             RecalculatePositionStatistics();
             RaisePropertyChanged(nameof(Positions));
         }
-        private void CLOSEDPOSITIONS_OnInitialLoad(object sender, IEnumerable<VisualHFT.Model.Position> e)
+        private void CLOSEDPOSITIONS_OnInitialLoad(object sender, IEnumerable<Position> e)
         {
-            _positions = new ObservableCollection<VisualHFT.Model.Position>(e);
+            _positions = new ObservableCollection<Position>(e);
             RaisePropertyChanged(nameof(Positions));
             RecalculatePositionStatistics();
         }
-        private void CLOSEDPOSITIONS_OnDataReceived(object sender, IEnumerable<VisualHFT.Model.Position> e)
+        private void CLOSEDPOSITIONS_OnDataReceived(object sender, IEnumerable<Position> e)
         {
             foreach (var pos in e)
             {

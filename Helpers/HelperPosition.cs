@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Data.Entity;
 using System.Windows;
+using VisualHFT.Commons.Helpers;
+using VisualHFT.Commons.Model;
 
 namespace VisualHFT.Helpers
 {
@@ -21,23 +23,23 @@ namespace VisualHFT.Helpers
     {
         private const int POLLING_INTERVAL = 5000; // Interval for polling the database
         private long? _LAST_POSITION_ID = null;
-        private List<VisualHFT.Model.Position> _positions;
+        private List<Position> _positions;
         private DateTime? _sessionDate = null;
         private readonly System.Timers.Timer _timer;
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource(); // Added cancellation token source
         private readonly HFTEntities _DB = null;
         private readonly object _lock = new object();
 
-        public event EventHandler<IEnumerable<VisualHFT.Model.Position>> OnInitialLoad;
-        public event EventHandler<IEnumerable<VisualHFT.Model.Position>> OnDataReceived;
-        protected virtual void RaiseOnInitialLoad(IEnumerable<VisualHFT.Model.Position> pos) => OnInitialLoad?.Invoke(this, pos);
-        protected virtual void RaiseOnDataReceived(IEnumerable<VisualHFT.Model.Position> pos) => OnDataReceived?.Invoke(this, pos);
+        public event EventHandler<IEnumerable<Position>> OnInitialLoad;
+        public event EventHandler<IEnumerable<Position>> OnDataReceived;
+        protected virtual void RaiseOnInitialLoad(IEnumerable<Position> pos) => OnInitialLoad?.Invoke(this, pos);
+        protected virtual void RaiseOnDataReceived(IEnumerable<Position> pos) => OnDataReceived?.Invoke(this, pos);
 
 
         public HelperPosition(ePOSITION_LOADING_TYPE loadingType)
         {
 
-            _positions = new List<VisualHFT.Model.Position>();
+            _positions = new List<Position>();
             this.LoadingType = loadingType;
             if (loadingType == ePOSITION_LOADING_TYPE.DATABASE)
             {
@@ -74,7 +76,7 @@ namespace VisualHFT.Helpers
                 }
                 if (this.Positions == null || !this.Positions.Any())
                 {
-                    _positions = new List<VisualHFT.Model.Position>(res);
+                    _positions = new List<Position>(res);
                     RaiseOnInitialLoad(this.Positions);
                 }
                 else
@@ -86,7 +88,7 @@ namespace VisualHFT.Helpers
             }
             _timer.Start(); // Restart the timer once the operation is complete
         }
-        public List<VisualHFT.Model.Position> Positions 
+        public List<Position> Positions 
         { 
             get { return _positions; }
         }
@@ -105,7 +107,7 @@ namespace VisualHFT.Helpers
                 }
             }
         }
-        private async Task<IEnumerable<VisualHFT.Model.Position>> GetPositionsAsync()
+        private async Task<IEnumerable<Position>> GetPositionsAsync()
         {
             if (!SessionDate.HasValue || _cancellationTokenSource.IsCancellationRequested) return null;
 
@@ -158,7 +160,7 @@ namespace VisualHFT.Helpers
 
             //return null;
         }
-        public void LoadNewPositions(IEnumerable<VisualHFT.Model.Position> positions)
+        public void LoadNewPositions(IEnumerable<Position> positions)
         {
             if (positions == null || !positions.Any() || _cancellationTokenSource.IsCancellationRequested) return;
 

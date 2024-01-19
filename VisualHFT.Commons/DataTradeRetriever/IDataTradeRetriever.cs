@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VisualHFT.Model;
+﻿using System.Collections.ObjectModel;
+using VisualHFT.Commons.Model;
 
-namespace VisualHFT.DataTradeRetriever
+namespace VisualHFT.Commons.DataTradeRetriever;
+
+public interface IDataTradeRetriever
 {
-    public interface IDataTradeRetriever
-    {
-        event EventHandler<IEnumerable<Order>> OnInitialLoad;
-        event EventHandler<IEnumerable<Order>> OnDataReceived;
-        DateTime? SessionDate { get; set; }
+    event EventHandler<IEnumerable<Order>> OnInitialLoad;
+    event EventHandler<IEnumerable<Order>> OnDataReceived;
+    DateTime? SessionDate { get; set; }
 
-        ReadOnlyCollection<Order> Orders { get; }
-        ReadOnlyCollection<Position> Positions { get; }
-    }
+    ReadOnlyCollection<Order> Orders { get; }
+    ReadOnlyCollection<Position> Positions { get; }
 }

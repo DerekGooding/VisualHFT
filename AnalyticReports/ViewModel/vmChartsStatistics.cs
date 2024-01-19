@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using VisualHFT.AnalyticReport;
+using VisualHFT.Commons.Extensions;
+using VisualHFT.Commons.Model;
 using VisualHFT.Helpers;
-using VisualHFT.Model;
 
 namespace VisualHFT.AnalyticReports.ViewModel
 {
@@ -21,7 +22,7 @@ namespace VisualHFT.AnalyticReports.ViewModel
         public List<PointF> regressionLineDataMFE { get; private set; }
         public List<ScatterChartData> MAE { get; private set; }
 
-        public void LoadData(List<VisualHFT.Model.Position> signals)
+        public void LoadData(List<Position> signals)
         {
             heldBars = (from x in signals.Where(s => s.CloseTimeStamp != null)
                             group x by x.CloseTimeStamp.Subtract(x.CreationTimeStamp).TotalSeconds.ToInt() into m

@@ -15,6 +15,8 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using QuickFix.Fields;
 using System.Threading;
+using VisualHFT.Commons.Helpers;
+using VisualHFT.Commons.Model;
 
 namespace VisualHFT.ViewModel
 {
@@ -25,7 +27,7 @@ namespace VisualHFT.ViewModel
         private string _selectedStrategy;
         private DateTime _selectedDate;
         private Dictionary<string, Func<string, string, bool>> _dialogs;        
-        private ObservableCollection<VisualHFT.Model.Order> _allOrders;
+        private ObservableCollection<Order> _allOrders;
         private ObservableCollection<PositionManager> _positionsManager;
         private readonly object _locker = new object();
         private bool _disposed = false; // to track whether the object has been disposed
@@ -47,7 +49,7 @@ namespace VisualHFT.ViewModel
 
             lock (_locker)
             {
-                _allOrders = new ObservableCollection<VisualHFT.Model.Order>();
+                _allOrders = new ObservableCollection<Order>();
                 OrdersView = CollectionViewSource.GetDefaultView(_allOrders);
                 OrdersView.SortDescriptions.Add(new SortDescription("CreationTimeStamp", ListSortDirection.Descending));
             }
@@ -64,12 +66,12 @@ namespace VisualHFT.ViewModel
             Dispose(false);
         }
 
-        private void ACTIVEORDERS_OnDataRemoved(object sender, VisualHFT.Model.Order e)
+        private void ACTIVEORDERS_OnDataRemoved(object sender, Order e)
         {
             if (e == null || string.IsNullOrEmpty(_selectedStrategy))
                 return;
 
-            VisualHFT.Model.Order existingItem = null;
+            Order existingItem = null;
             lock (_locker)
                 existingItem = _allOrders.Where(x => x.ClOrdId == e.ClOrdId).FirstOrDefault();
             if (existingItem != null)
@@ -81,13 +83,13 @@ namespace VisualHFT.ViewModel
             }
 
         }
-        private void ACTIVEORDERS_OnDataReceived(object sender, VisualHFT.Model.Order e)
+        private void ACTIVEORDERS_OnDataReceived(object sender, Order e)
         {
             if (e == null || string.IsNullOrEmpty(_selectedStrategy))
                 return;
             if (e != null)
             {
-                VisualHFT.Model.Order existingItem = null;
+                Order existingItem = null;
 
                 lock (_locker)
                     existingItem = _allOrders.Where(x => x.ClOrdId == e.ClOrdId).FirstOrDefault();
@@ -121,13 +123,13 @@ namespace VisualHFT.ViewModel
                     existingItem.UnrealizedPL = e.UnrealizedPL;
             }*/
         }
-        private void EXECUTEDORDERS_OnInitialLoad(object sender, IEnumerable<VisualHFT.Model.Order> e)
+        private void EXECUTEDORDERS_OnInitialLoad(object sender, IEnumerable<Order> e)
         {
             if (_allOrders.Count == 0 && !e.Any() ) return;
 
             ReloadOrders(e.ToList());
         }
-        private void EXECUTEDORDERS_OnDataReceived(object sender, IEnumerable<VisualHFT.Model.Order> e)
+        private void EXECUTEDORDERS_OnDataReceived(object sender, IEnumerable<Order> e)
         {
             lock (_locker)
             {
@@ -137,7 +139,7 @@ namespace VisualHFT.ViewModel
         }
 
 
-        public ObservableCollection<VisualHFT.Model.Order> AllOrders
+        public ObservableCollection<Order> AllOrders
         {
             get => _allOrders;
             set
@@ -185,7 +187,7 @@ namespace VisualHFT.ViewModel
         {
             SelectedFilter = filter;
         }
-        private void ReloadOrders(List<VisualHFT.Model.Order> orders)
+        private void ReloadOrders(List<Order> orders)
         {
             string symbol = _selectedSymbol;
             if (_selectedSymbol == "-- All symbols --")
@@ -221,7 +223,7 @@ namespace VisualHFT.ViewModel
                 case "Working":
                     OrdersView.Filter = o =>
                     {
-                        var order = (VisualHFT.Model.Order)o;
+                        var order = (Order)o;
                         return new[] { "NONE", "SENT", "NEW", "PARTIALFILLED", "CANCELEDSENT", "REPLACESENT", "REPLACED" }.Contains(order.Status.ToString())
                                && order.CreationTimeStamp.Date == _selectedDate.Date;
                     };
@@ -229,7 +231,7 @@ namespace VisualHFT.ViewModel
                 case "Filled":
                     OrdersView.Filter = o =>
                     {
-                        var order = (VisualHFT.Model.Order)o;
+                        var order = (Order)o;
                         return (order.Status.ToString() == "FILLED" || order.Status.ToString() == "PARTIALFILLED")
                                && order.CreationTimeStamp.Date == _selectedDate.Date;
                     };
@@ -237,13 +239,13 @@ namespace VisualHFT.ViewModel
                 case "Cancelled":
                     OrdersView.Filter = o =>
                     {
-                        var order = (VisualHFT.Model.Order)o;
+                        var order = (Order)o;
                         return new[] { "CANCELED", "REJECTED" }.Contains(order.Status.ToString())
                                && order.CreationTimeStamp.Date == _selectedDate.Date;
                     };
                     break;
                 case "All":
-                    OrdersView.Filter = o => ((VisualHFT.Model.Order)o).CreationTimeStamp.Date == _selectedDate.Date;
+                    OrdersView.Filter = o => ((Order)o).CreationTimeStamp.Date == _selectedDate.Date;
                     //OrdersView.Filter = null;
                     break;
             }

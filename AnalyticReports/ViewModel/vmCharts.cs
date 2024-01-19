@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using VisualHFT.Commons.Extensions;
+using VisualHFT.Commons.Model;
 using VisualHFT.Model;
 
 namespace VisualHFT.AnalyticReports.ViewModel
@@ -11,7 +13,7 @@ namespace VisualHFT.AnalyticReports.ViewModel
         public List<cHourSerie> HourSerieWins { get; private set; }
         public List<cHourSerie> HourSerieLosses { get; private set; }
 
-        public void LoadData(List<VisualHFT.Model.Position> signals)
+        public void LoadData(List<Position> signals)
         {
 
             //#region Hours of the day
