@@ -10,6 +10,7 @@ using VisualHFT.Commons.PluginManager;
 using VisualHFT.Commons.UserSettings;
 using VisualHFT.Helpers;
 using VisualHFT.Studies.MarketResilience.UserControls;
+using VisualHFT.Commons.Extensions;
 
 namespace Studies.MarketResilience;
 
@@ -174,6 +175,8 @@ public class MarketResilienceStudy : BasePluginStudy
         TimeSpan maxRecoveryTime = TimeSpan.FromMinutes(1);
         if (_settings != null)
             maxRecoveryTime = _settings.AggregationLevel.ToTimeSpan();
+
+        
 
         // Calculate normalized time recovery
         double normalizedTimeRecovery = 1.00 - timeSinceLargeTrade.TotalMicroseconds / maxRecoveryTime.TotalMicroseconds;

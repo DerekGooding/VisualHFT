@@ -17,7 +17,7 @@ namespace VisualHFT.ViewModel
     public class vmProvider : BindableBase
     {
         //private VisualHFT.Model.Provider _selectedItem;
-        private ObservableCollection<ViewModel.Model.Provider> _providers;
+        private ObservableCollection<Commons.WPF.ViewModel.Model.Provider> _providers;
         
         private ICommand _cmdUpdateStatus;
         private Dictionary<string, Func<string, string, bool>> _dialogs;
@@ -30,7 +30,7 @@ namespace VisualHFT.ViewModel
             this._dialogs = dialogs;
             _cmdUpdateStatus = new RelayCommand<object>(DoUpdateStatus);
 
-            _providers = VisualHFT.ViewModel.Model.Provider.CreateObservableCollection();
+            _providers = Commons.WPF.ViewModel.Model.Provider.CreateObservableCollection();
 
             HelperProvider.Instance.OnDataReceived += PROVIDERS_OnDataReceived;
             HelperProvider.Instance.OnHeartBeatFail += PROVIDERS_OnHeartBeatFail;
@@ -61,7 +61,7 @@ namespace VisualHFT.ViewModel
                     {
                         if (!_providers.Any(x => x.ProviderCode == e.ProviderCode))
                         {
-                            _providers.Add(new Model.Provider(e));
+                            _providers.Add(new Commons.WPF.ViewModel.Model.Provider(e));
                         }
                     }
                 }));
@@ -83,7 +83,7 @@ namespace VisualHFT.ViewModel
                     {
                         if (!_providers.Any(x => x.ProviderCode == e.ProviderCode))
                         {
-                            _providers.Add(new Model.Provider(e));
+                            _providers.Add(new Commons.WPF.ViewModel.Model.Provider(e));
                         }
                     }
                 }));
@@ -92,32 +92,31 @@ namespace VisualHFT.ViewModel
 
         private void DoUpdateStatus(object obj)
         {
-            var _selectedItem = obj as VisualHFT.ViewModel.Model.Provider;
-            if (_selectedItem != null)
+            Provider? _selectedItem = obj as Provider;
+            if (_selectedItem == null) return;
+            
+            eSESSIONSTATUS statusToSend;
+            if (_selectedItem.Status != eSESSIONSTATUS.BOTH_DISCONNECTED)
+                statusToSend = eSESSIONSTATUS.BOTH_DISCONNECTED;
+            else
+                statusToSend = eSESSIONSTATUS.BOTH_CONNECTED;
+            string msg = "Are you sure want to" + (statusToSend == eSESSIONSTATUS.BOTH_CONNECTED ? " connect " : " disconnect ") + "'" + _selectedItem.ProviderName + "' ?";
+            if (_dialogs.ContainsKey("confirm") && _dialogs["confirm"](msg, "Updating..."))
             {
-                eSESSIONSTATUS statusToSend;
-                if (_selectedItem.Status != eSESSIONSTATUS.BOTH_DISCONNECTED)
-                    statusToSend = eSESSIONSTATUS.BOTH_DISCONNECTED;
-                else
-                    statusToSend = eSESSIONSTATUS.BOTH_CONNECTED;
-                string msg = "Are you sure want to" + (statusToSend == eSESSIONSTATUS.BOTH_CONNECTED ? " connect " : " disconnect ") + "'" + _selectedItem.ProviderName + "' ?";
-                if (_dialogs.ContainsKey("confirm") && _dialogs["confirm"](msg, "Updating..."))
+                var _linkToPlugIn = _selectedItem.Plugin as IDataRetriever;
+                if (_linkToPlugIn != null)
                 {
-                    var _linkToPlugIn = _selectedItem.Plugin as IDataRetriever;
-                    if (_linkToPlugIn != null)
+                    Task.Run(() =>
                     {
-                        Task.Run(() =>
-                        {
-                            if (statusToSend == eSESSIONSTATUS.BOTH_CONNECTED)
-                                _linkToPlugIn.StartAsync();
-                            else
-                                _linkToPlugIn.StopAsync();
-                        });
-                    }
+                        if (statusToSend == eSESSIONSTATUS.BOTH_CONNECTED)
+                            _linkToPlugIn.StartAsync();
+                        else
+                            _linkToPlugIn.StopAsync();
+                    });
                 }
             }
         }
-        public ObservableCollection<VisualHFT.ViewModel.Model.Provider> Providers
+        public ObservableCollection<Commons.WPF.ViewModel.Model.Provider> Providers
         {
             get => _providers;
             set => SetProperty(ref _providers, value);

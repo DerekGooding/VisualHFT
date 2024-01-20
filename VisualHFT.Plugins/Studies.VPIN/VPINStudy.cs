@@ -1,4 +1,5 @@
 ﻿using Studies.VPIN.Model;
+using Studies.VPIN.ViewModel;
 using System;
 using System.Threading.Tasks;
 using VisualHFT.Commons.Helpers;
@@ -7,7 +8,6 @@ using VisualHFT.Commons.PluginManager;
 using VisualHFT.Commons.UserSettings;
 using VisualHFT.Helpers;
 using VisualHFT.Studies.VPIN.UserControls;
-using VisualHFT.Studies.VPIN.ViewModel;
 
 namespace Studies.VPIN;
 

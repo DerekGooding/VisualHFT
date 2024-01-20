@@ -1,17 +1,17 @@
 ﻿using Prism.Mvvm;
 using System;
-using System.Windows.Input;
-using System.Windows;
-using VisualHFT.Helpers;
-using VisualHFT.UserSettings;
-using VisualHFT.ViewModels;
-using System.Windows.Media;
-using VisualHFT.Commons.Studies;
-using VisualHFT.View;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
+using VisualHFT.Commons.Helpers;
 using VisualHFT.Commons.Model;
 using VisualHFT.Commons.PluginManager;
+using VisualHFT.Commons.Studies;
+using VisualHFT.Commons.WPF.Helper;
+using VisualHFT.UserSettings;
+using VisualHFT.View;
 
 namespace VisualHFT.ViewModel
 {
@@ -224,8 +224,10 @@ namespace VisualHFT.ViewModel
         {
             if (_study != null)
             {
-                var winChart = new ChartStudy();
-                winChart.DataContext = new vmChartStudy(_study);
+                var winChart = new ChartStudy
+                {
+                    DataContext = new vmChartStudy(_study, null)
+                };
                 winChart.Show();
             }
             else if (_multiStudy != null)

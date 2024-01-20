@@ -11,6 +11,7 @@ using Prism.Mvvm;
 using VisualHFT.Commons.Extensions;
 using VisualHFT.Commons.Helpers;
 using VisualHFT.Commons.Model;
+using HelperCommon = VisualHFT.Helpers.HelperCommon;
 
 namespace VisualHFT.ViewModel
 {

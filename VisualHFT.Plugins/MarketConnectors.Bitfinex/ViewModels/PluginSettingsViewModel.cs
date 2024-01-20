@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using VisualHFT.Commons.Helpers;
 using VisualHFT.DataRetriever;
 using VisualHFT.Helpers;
 

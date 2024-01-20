@@ -32,7 +32,7 @@ public class vmChartStudy : BindableBase, IDisposable
     private readonly object _locker = new object();
 
     private int _MAX_ITEMS = 500;
-    private VisualHFT.Commons.WPF.Helper.UIUpdater uiUpdater;
+    private UIUpdater uiUpdater;
 
     public vmChartStudy(IStudy study, ObservableCollection<AggregatedCollection<BaseStudyModel>> rollingValues)
     {

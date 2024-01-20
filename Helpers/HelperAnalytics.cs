@@ -327,8 +327,8 @@ namespace VisualHFT.Helpers
         public static double GetExpectancy(List<Position> aSignal)
         {
 			//(Average Winner x Win Rate) – (Average Loser x Loss Rate)
-			var avgWinner = (double)aSignal.Where(x => x.PipsPnLInCurrency.HasValue && x.PipsPnLInCurrency.Value >= 0).DefaultIfEmpty(new VisualHFT.Model.Position() { PipsPnLInCurrency = 0 }).Average(x => x.PipsPnLInCurrency.Value);
-            var avgLosser = (double) aSignal.Where(x => x.PipsPnLInCurrency.HasValue && x.PipsPnLInCurrency.Value < 0).DefaultIfEmpty(new VisualHFT.Model.Position() { PipsPnLInCurrency = 0 }).Average(x => Math.Abs(x.PipsPnLInCurrency.Value));
+			var avgWinner = (double)aSignal.Where(x => x.PipsPnLInCurrency.HasValue && x.PipsPnLInCurrency.Value >= 0).DefaultIfEmpty(new Position() { PipsPnLInCurrency = 0 }).Average(x => x.PipsPnLInCurrency.Value);
+            var avgLosser = (double) aSignal.Where(x => x.PipsPnLInCurrency.HasValue && x.PipsPnLInCurrency.Value < 0).DefaultIfEmpty(new Position() { PipsPnLInCurrency = 0 }).Average(x => Math.Abs(x.PipsPnLInCurrency.Value));
             var winRate = (double)aSignal.Where(x => x.PipsPnLInCurrency.HasValue && x.PipsPnLInCurrency.Value >= 0).Count() / aSignal.Count();
             var lossRate = (double)aSignal.Where(x => x.PipsPnLInCurrency.HasValue && x.PipsPnLInCurrency.Value < 0).Count() / aSignal.Count();
 

@@ -17,6 +17,7 @@ using QuickFix.Fields;
 using System.Threading;
 using VisualHFT.Commons.Helpers;
 using VisualHFT.Commons.Model;
+using HelperCommon = VisualHFT.Helpers.HelperCommon;
 
 namespace VisualHFT.ViewModel
 {

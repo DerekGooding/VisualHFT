@@ -2,7 +2,6 @@
 using OxyPlot.Axes;
 using OxyPlot.Legends;
 using Prism.Mvvm;
-using QuickFix.Fields;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using VisualHFT.Commons.Helpers;
 using VisualHFT.Commons.Model;
+using VisualHFT.Commons.WPF.Helper;
 using VisualHFT.Helpers;
 using VisualHFT.Model;
 
@@ -34,16 +34,16 @@ namespace VisualHFT.ViewModel
             HelperOrderBook.Instance.Subscribe(LIMITORDERBOOK_OnDataReceived);
 
 
-            AggregationLevels = new ObservableCollection<Tuple<string, AggregationLevel>>();
+            AggregationLevels = [];
             foreach (AggregationLevel level in Enum.GetValues(typeof(AggregationLevel)))
             {
-                AggregationLevels.Add(new Tuple<string, AggregationLevel>(HelperCommon.GetEnumDescription(level), level));
+                AggregationLevels.Add(new Tuple<string, AggregationLevel>(Commons.Helpers.HelperCommon.GetEnumDescription(level), level));
             }
             AggregationLevelSelection = AggregationLevel.Ms100;
             uiUpdater = new UIUpdater(uiUpdaterAction);
 
-            _allDataSeries = new Dictionary<int, Tuple<AggregatedCollection<PlotInfo>, OxyPlot.Series.LineSeries>>();
-            _latesPrice = new Dictionary<int, double>();
+            _allDataSeries = [];
+            _latesPrice = [];
         }
         ~vmMultiVenuePrices()
         {
